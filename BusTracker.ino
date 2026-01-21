@@ -1,5 +1,4 @@
 #include <Adafruit_EPD.h>
-#include <Adafruit_MCPSRAM.h>
 #include <Adafruit_ThinkInk.h>
 
 #include <WiFi.h>
@@ -8,10 +7,11 @@
 
 
 // --- Configuration ---
-const char* ssid = "YOUR_WIFI_SSID";          // Replace with your Wi-Fi network name
-const char* password = "YOUR_WIFI_PASSWORD";  // Replace with your Wi-Fi password
+const char* ssid = "";          // Replace with your Wi-Fi network name
+const char* password = "";  // Replace with your Wi-Fi password
 const char* url = "https://www.transsee.ca/predict?s=cota.001.NHI1STN";    // The target website (use http:// or https://)
-const String startTag = "<div class=\"divp\">";
+const String startTag = "<div class=divp id=\"001_NHI1STN_1\">"; // for immediately next bus
+const String startTag2 = "<div class=divp id=\"001_NHI1STN_2\">"; // for following bus
 const String endTag = "</div>";
 // ---------------------
 
@@ -61,6 +61,9 @@ void loop() {
       Serial.printf("[HTTP] GET success, code: %d\n", httpCode);
       htmlContent = http.getString();
       
+      // FOR DEBUG, print HTML to serial
+      Serial.println(htmlContent);
+
       // 3. Simple HTML Parsing
       int startIndex = htmlContent.indexOf(startTag);
       
@@ -89,12 +92,18 @@ void loop() {
           extractedText.trim(); // Remove leading/trailing whitespace
         }
       }
-      
+      // Substring time. Grab between first ":" and "."
+      int colon = extractedText.indexOf(":")+2;
+      int period = extractedText.indexOf(".");
+      String nextBus = extractedText.substring(colon, period-1); // Start index, stop index
+
+
+
       // 4. Display the Result
       Serial.println("\n=============================================");
       if (extractedText.length() > 0) {
-        Serial.println("Extracted Text from .divp node:");
-        Serial.println(extractedText);
+        Serial.println("Next bus in:");
+        Serial.println(nextBus);
       } else {
         Serial.println("Could not find or extract content from the .divp node.");
       }
@@ -110,7 +119,7 @@ void loop() {
   http.end(); // Free the resources
 
   // If there's stuff to update::
-  DisplayStuff();
+  //DisplayStuff(nextBus, followingBus);
 
   // Else display "no buses" message
     
@@ -118,6 +127,6 @@ void loop() {
   delay(60000);
 }
 
-bool Displaystuff(){
-    // Push stuff to E-ink display here
+bool DisplayStuff(String displayString1, String displayString2){
+    return true;// Push stuff to E-ink display here
 }
