@@ -207,7 +207,7 @@ String partitionText(String input){
   // Substring time. Grab between first ":" and "."
   int colon = input.indexOf(":")+2;
   int period = input.indexOf(".");
-  return input.substring(colon, period-1); // Start index, stop index
+  return input.substring(colon, period); // Start index, stop index
   // Example output:  "0:35 Mins at 4:33:02PM"
 }
 
