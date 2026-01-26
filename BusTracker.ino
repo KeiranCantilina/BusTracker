@@ -17,8 +17,8 @@
 ThinkInk_213_Mono_GDEY0213B74 display(EPD_DC, EPD_RESET, EPD_CS, SRAM_CS, EPD_BUSY, EPD_SPI);
 
 // Network config 
-const char* ssid = "";          // Replace with your Wi-Fi network name
-const char* password = "";  // Replace with your Wi-Fi password
+const char* ssid = "ATTYus6YvR";          // Replace with your Wi-Fi network name
+const char* password = "t8hwu+hxd%n7";  // Replace with your Wi-Fi password
 const char* url = "https://www.transsee.ca/predict?s=cota.001.NHI1STN";    // The target website (use http:// or https://)
 const String startTag = "<div class=divp id=\"001_NHI1STN_1\">"; // for immediately next bus
 const String startTag2 = "<div class=divp id=\"001_NHI1STN_2\">"; // for following bus
@@ -50,7 +50,7 @@ void setup() {
   // Connect to Wi-Fi
   Serial.print("Connecting to WiFi: ");
   Serial.println(ssid);
-  displayError("Connecting to WiFi: " + String(ssid));
+  displayError("Connecting to WiFi: \n" + String(ssid));
   delay(1000);
   WiFi.begin(ssid, password);
 
@@ -68,7 +68,7 @@ void setup() {
   } else {
     Serial.println("\nFailed to connect to WiFi!");
     isError = true;
-    errorText = "Failed to connect to WiFi!\nPlease power cycle and try again.";
+    errorText = "Failed to connect to WiFi!\nPlease power cycle and try \nagain.";
     displayError(errorText);
     while(true){delay(1000);}
   }
@@ -226,6 +226,7 @@ void displayError(String errorMessage){
   display.setTextSize(1);
   display.setTextWrap(true);
   display.setTextColor(EPD_BLACK);
-  display.setCursor(10, 65); // Start location of text
+  display.setCursor(10, 30); // Start location of text
   display.println(errorMessage);
+  display.display();
 }
